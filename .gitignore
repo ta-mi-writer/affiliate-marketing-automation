@@ -13,3 +13,4 @@ wheels/
 .env
 draft.md
 .ruff_cache
+html-elements.md
