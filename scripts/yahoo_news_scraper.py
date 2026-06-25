@@ -88,3 +88,7 @@ def main() -> None:
   data = scrape_yahoo_news(url)
   save_to_json(data, output_path)
   print(f"Saved {len(data)} articles to {output_path}")
+
+
+if __name__ == "__main__":
+  main()
