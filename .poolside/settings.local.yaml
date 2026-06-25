@@ -1,0 +1,6 @@
+tools:
+    shell:
+        allow:
+            - uv run ruff check *
+            - uv run basedpyright *
+            - uv run python *
