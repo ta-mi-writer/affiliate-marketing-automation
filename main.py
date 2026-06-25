@@ -1,10 +1,6 @@
 """Scraping module - main entry point."""
 
-
-def main() -> None:
-  """Main entry point for the scraping module."""
-  print("Hello from scraping!")
-
+from scripts.yahoo_news_scraper import main
 
 if __name__ == "__main__":
-  main()
+    main()
