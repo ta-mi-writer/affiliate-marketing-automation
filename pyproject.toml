@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "openrouter>=0.10.0",
     "scrapling[all]>=0.4.9",
     "sqlalchemy>=2.0.50",
 ]
@@ -29,6 +30,7 @@ ignore = [
   "COM812",
   "ISC001",
   "D415",
+  "RUF001",
   "RUF002",
   "RUF003",
   "DTZ007",

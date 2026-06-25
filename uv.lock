@@ -401,6 +401,15 @@ wheels = [
 ]
 
 [[package]]
+name = "jsonpath-python"
+version = "1.1.6"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/98/18/4ca8742534a5993ff383f7602e325ce2d5d7cc93d72ac5e1cdedbea8a458/jsonpath_python-1.1.6.tar.gz", hash = "sha256:dded9932b4ec41fb8726e09c83afa4e6be618f938c2db287cc2a81723c639671", size = 88178, upload-time = "2026-05-07T01:26:34.482Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/55/8a/1270a6803bd821cbfcdda387eaa13cb41a7b1f7b9bd145979b3bfb9d6cb7/jsonpath_python-1.1.6-py3-none-any.whl", hash = "sha256:a1c50afd8d3fbbaf47a4873bc890dcb3c15da96f5c020327977d844d8731a2d4", size = 14453, upload-time = "2026-05-07T01:26:33.306Z" },
+]
+
+[[package]]
 name = "jsonschema"
 version = "4.26.0"
 source = { registry = "https://pypi.org/simple" }
@@ -564,6 +573,21 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/42/b4/c0f54632103846b658a10930025f4de41c8724b5e4805a5f3b395586cb7e/msgspec-0.21.1-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:0d03867786e5d7ba25d666df4b11320c27170f4aeafcb8e3a8b0a50a4fb742ca", size = 231822, upload-time = "2026-04-12T21:44:46.343Z" },
     { url = "https://files.pythonhosted.org/packages/ea/1d/0d85cc79d0ccf5508e9c846cc66552a6a16bf92abd1dbd8362617f7b35cd/msgspec-0.21.1-cp314-cp314t-win_amd64.whl", hash = "sha256:740fbf1c9d59992ca3537d6fbe9ebbf9eaf726a65fbf31448e0ecbc710697a63", size = 206650, upload-time = "2026-04-12T21:44:47.601Z" },
     { url = "https://files.pythonhosted.org/packages/90/91/56c5d560f20e6c20e9e4f55bd0e458f7f162aa689ee350346c04c48eac0b/msgspec-0.21.1-cp314-cp314t-win_arm64.whl", hash = "sha256:0d2cc73df6058d811a126ac3a8ad63a4dfa210c82f9cf5a004802eaf4712de90", size = 183149, upload-time = "2026-04-12T21:44:48.833Z" },
+]
+
+[[package]]
+name = "openrouter"
+version = "0.10.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpcore" },
+    { name = "httpx" },
+    { name = "jsonpath-python" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/04/35/9d368e4f4780658556b21b7d911215822bfe3cc0da930d84505b7361c9b7/openrouter-0.10.0.tar.gz", hash = "sha256:04567dfc39f11f8e4ff693c966f338610bd3032ee7abceb4b71c99409b8a92e4", size = 317872, upload-time = "2026-06-17T13:50:30.628Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/89/64/4166b81b5c8a899a80f457b7d340fa202df3083eac13cbe1cb6bede772a4/openrouter-0.10.0-py3-none-any.whl", hash = "sha256:0e318c1ea61fe1c78633dcef97440f43fca7322989d52e5bcea780fabd9150d6", size = 704688, upload-time = "2026-06-17T13:50:31.982Z" },
 ]
 
 [[package]]
@@ -976,6 +1000,7 @@ name = "scraping"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "openrouter" },
     { name = "scrapling", extra = ["all"] },
     { name = "sqlalchemy" },
 ]
@@ -987,6 +1012,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "openrouter", specifier = ">=0.10.0" },
     { name = "scrapling", extras = ["all"], specifier = ">=0.4.9" },
     { name = "sqlalchemy", specifier = ">=2.0.50" },
 ]
