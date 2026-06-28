@@ -31,13 +31,28 @@ def parse_article(article: Selector) -> dict[str, str]:
   """
   url = article.attrib.get("href", "")
 
-  # Title is in div with class containing "sc-3ls169-0"
-  title_elem = article.css(".sc-3ls169-0")
-  title = title_elem[0].text if title_elem else ""
+  # Find <time> element first (semantic, stable anchor)
+  time_elems = article.css("time")
+  time_text = time_elems[0].text if time_elems else ""
 
-  # Time is in <time> element
-  time_elem = article.css("time")
-  time_text = time_elem[0].text if time_elem else ""
+  # Title extraction using structural navigation:
+  # Structure: <div><p>TITLE</p><div><time>...</time></div></div>
+  # The <p> with title is a previous sibling of the <div> containing <time>
+  # But if no previous sibling, look for <p> inside the same parent
+  title = ""
+  if time_elems:
+    time_parent = time_elems[0].parent
+    if time_parent:
+      container = time_parent.parent
+      if container:
+        title_div = container.previous
+        if title_div:
+          title = title_div.text or ""
+        else:
+          # Title is a <p> element inside the same container
+          p_elems = container.css("p")
+          if p_elems:
+            title = p_elems[0].text or ""
 
   return {
     "title": title,
@@ -57,8 +72,10 @@ def scrape_yahoo_news(url: str) -> list[dict[str, str]]:
   """
   doc = fetch_page(url)
 
-  # Find all article links
-  articles = doc.css('a[href*="articles"]')
+  # Find all article links using data-cl-params attribute
+  # Filter to only include /articles/ URLs (exclude pickup articles)
+  articles = doc.css('a[data-cl-params*="_cl_link:title"]')
+  articles = [a for a in articles if "/articles/" in a.attrib.get("href", "")]
 
   results = []
   for article in articles:
