@@ -2,6 +2,8 @@
 
 import json
 import os
+import re
+from collections import Counter
 from pathlib import Path
 
 from openrouter import OpenRouter
@@ -63,13 +65,13 @@ def classify_articles(client: OpenRouter, prompt: str) -> str:
   return str(response.choices[0].message.content)
 
 
-def save_articles(data: list[dict[str, str | None]], output_path: Path) -> None:
+def save_articles(data: list[dict[str, str | None]]) -> None:
   """記事情報をJSONファイルに保存する。
 
   Args:
       data: 記事の辞書のリスト。
-      output_path: 出力ファイルのパス。
   """
+  output_path = Path(__file__).parent.parent / "output" / "articles.json"
   output_path.parent.mkdir(parents=True, exist_ok=True)
   text = json.dumps(data, ensure_ascii=False, indent=2)
   output_path.write_text(text, encoding="utf-8")
@@ -96,19 +98,30 @@ def main() -> None:
 
   # Parse LLM response and update genre in articles
   try:
-    classifications = json.loads(result)
+    # Remove markdown code blocks if present
+    cleaned_result = re.sub(r"^```json\s*", "", result.strip())
+    cleaned_result = re.sub(r"\s*```$", "", cleaned_result)
+    
+    classifications = json.loads(cleaned_result)
     genre_map = {c["id"]: c["genre"] for c in classifications}
     for article in articles:
       article_id = article.get("id")
       if article_id and article_id in genre_map:
         article["genre"] = genre_map[article_id]
-  except json.JSONDecodeError, KeyError:
+  except (json.JSONDecodeError, KeyError):
     print(f"Warning: Failed to parse classification result: {result}")
     return
 
   # Save updated articles back to articles.json
-  save_articles(articles, articles_path)
+  save_articles(articles)
   print(f"Saved {len(unclassified)} classified articles to {articles_path}")
+
+  # Summary of classifications
+  genres = [a.get("genre") for a in articles if a.get("genre") is not None]
+  summary = Counter(genres)
+  print("\n--- Classification Summary ---")
+  for genre, count in summary.items():
+    print(f"{genre}: {count}")
 
 
 if __name__ == "__main__":
